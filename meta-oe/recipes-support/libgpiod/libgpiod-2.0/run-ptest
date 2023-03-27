@@ -1,9 +1,13 @@
 #!/bin/sh
 
-testbins="gpiod-test gpio-tools-test gpiod-cxx-test"
+testbins="gpiod-test gpio-tools-test gpiod-cxx-test gpiod-glib-test gpiodbus-test"
 
 ptestdir=$(dirname "$(readlink -f "$0")")
 cd $ptestdir/tests
+
+GPIODBUS_TEST_DAEMON_PATH=$ptestdir
+
+systemctl stop gpio-manager 2> /dev/null > /dev/null
 
 # libgpiod v2 uses gpio-sim - a configfs-based testing module. We need to
 # make sure configfs is mounted before running any tests.
