@@ -27,12 +27,18 @@ RDEPENDS:${PN}-ptest += " \
 
 export GPIOD_WITH_TESTS = "${@bb.utils.contains("PTEST_ENABLED", "1", "1", "0", d)}"
 
+do_compile_ptest() {
+    # Build the test-specific extensions within the source tree (this happens
+    # to also rebuild the main extension but there's no way around it).
+    ${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} setup.py build_ext --inplace
+}
+
 do_install_ptest() {
     install -d ${D}${PTEST_PATH}/gpiod-test/gpiosim
     install -d ${D}${PTEST_PATH}/gpiod-test/procname
     install -m 0644 ${S}/tests/*.py ${D}${PTEST_PATH}/gpiod-test/
-    install -m 0644 ${B}/build/lib*/tests/gpiosim/_ext* ${D}${PTEST_PATH}/gpiod-test/gpiosim
+    install -m 0644 ${S}/tests/gpiosim/_ext* ${D}${PTEST_PATH}/gpiod-test/gpiosim
     install -m 0644 ${S}/tests/gpiosim/*.py ${D}${PTEST_PATH}/gpiod-test/gpiosim
-    install -m 0644 ${B}/build/lib*/tests/procname/_ext* ${D}${PTEST_PATH}/gpiod-test/procname
+    install -m 0644 ${S}/tests/procname/_ext* ${D}${PTEST_PATH}/gpiod-test/procname
     install -m 0644 ${S}/tests/procname/*.py ${D}${PTEST_PATH}/gpiod-test/procname
 }
