@@ -15,7 +15,7 @@ SRC_URI += " \
     file://run-ptest.in \
 "
 
-SRC_URI[sha256sum] = "4bdd4b8a7042f63a40507ae0f16b360011e67cbb2f0276289636487a54849530"
+SRC_URI[sha256sum] = "bb38e31e4046a7aa0101c53c9e7e2cf319c0cd9620b9ba1641e962fce44a1f3a"
 
 # For full backward compatibility with the kernel sysfs interface, this option
 # must be selected. However, we don't make it the default as - with kernel sysfs
@@ -66,7 +66,7 @@ RDEPENDS:${PN} += " \
 python __anonymous() {
     if d.getVar("PTEST_ENABLED") == "1":
         d.appendVar("SRC_URI", "git://github.com/brgl/gpio-sysfs-compat-tests;protocol=https;branch=main;destsuffix=tests;name=tests")
-        d.setVar("SRCREV_tests", "a3c9daa4650dd1e8d7fd8972db68d9c2c204263d")
+        d.setVar("SRCREV_tests", "2882af358480afcf7eed85584cddd560d6673637")
 }
 
 do_install_ptest() {
@@ -81,5 +81,5 @@ USERADD_PACKAGES = "${PN}-ptest"
 GROUPADD_PARAM:${PN}-ptest = "--system gpio-test"
 USERADD_PARAM:${PN}-ptest = "--system -M -s /bin/nologin -g gpio-test gpio-test"
 
-RDEPENDS:${PN}-ptest += "kmod"
+RDEPENDS:${PN}-ptest += "kmod python3-multiprocess"
 RRECOMMENDS:${PN}-ptest += "kernel-module-gpio-sim kernel-module-configfs"
